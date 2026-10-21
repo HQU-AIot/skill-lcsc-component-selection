@@ -1,0 +1,4 @@
+interface:
+  display_name: "立创商城元器件选型"
+  short_description: "仅从立创商城检索，直接展示或生成完整选型 Excel"
+  default_prompt: "使用 $lcsc-component-selection 从立创商城检索符合需求的元器件，并直接展示或生成包含全部候选、市场信息和选型意见的 Excel。"
