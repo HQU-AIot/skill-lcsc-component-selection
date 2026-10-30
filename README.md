@@ -1,10 +1,6 @@
-# AIoT Skills
+# 立创商城元器件选型 Skill
 
-华侨大学 AIoT 协会维护的 Codex 技能集合，用于沉淀可复用、可审计的工程工作流。
-
-## 已收录技能
-
-### `lcsc-component-selection`：立创商城元器件选型
+`lcsc-component-selection` 是一个面向 Codex 的立创商城元器件选型技能。
 
 面向电子元器件选型、替代料比较、BOM 候选筛选与采购前核验。技能会从立创商城（`szlcsc.com`）检索候选，先按硬性电气约束筛选，再比较设计裕量、功能适配、价格阶梯、库存、起订量、包装数量和供应风险。
 
@@ -26,11 +22,18 @@
 
 如果已经确定唯一料号、只需查看单个商品信息，本技能通常不会自动介入。
 
+## 项目信息
+
+- 作者：Floatw007
+- 维护状态：`experimental`（仍在完善，接口和工作流可能调整）
+- 许可证：MIT，详见 [LICENSE](LICENSE)
+
 ## 仓库结构
 
 ```text
-AIoT-Skills/
+skill-lcsc-component-selection/
 ├─ README.md
+├─ LICENSE
 └─ lcsc-component-selection/
    ├─ SKILL.md
    ├─ agents/
@@ -44,8 +47,8 @@ AIoT-Skills/
 将技能目录复制到 Codex 的个人技能目录：
 
 ```powershell
-git clone https://github.com/HQU-AIot/AIoT-Skills.git
-Copy-Item -Recurse -Force .\AIoT-Skills\lcsc-component-selection "$env:USERPROFILE\.codex\skills\lcsc-component-selection"
+git clone https://github.com/HQU-AIot/skill-lcsc-component-selection.git
+Copy-Item -Recurse -Force .\skill-lcsc-component-selection\lcsc-component-selection "$env:USERPROFILE\.codex\skills\lcsc-component-selection"
 ```
 
 重新打开 Codex 会话后，即可通过自然语言触发，或显式使用：
@@ -72,8 +75,23 @@ $lcsc-component-selection
 
 ## 数据与操作边界
 
+- 只读访问 `szlcsc.com` 及其立创商品子域，不把其他商城或聚合站作为候选来源。
+- 不主动登录；如果用户已经登录立创商城，只读使用现有会话核验动态商品页。
+- 不加购、不询价、不下单，也不执行任何会改变用户账户状态的操作。
+- 除按用户要求生成 Excel 或结果文件外，不修改本地文件。
 - 价格、库存、起订量和交期均是查询时的页面快照，不构成长期承诺。
 - 页面未公开的参数会标记为“未提供/待核验”，不会猜测补全。
-- 默认只读检索，不登录、加购、询价或下单；这些操作必须由用户另行明确授权。
 - 最终料号应由用户结合原理图、样品与实测确认；未经确认，不应直接写入 BOM 或采购单。
 
+## 最小复测记录
+
+向技能索引仓库重新提交或在评审 Issue 中回复时，请附上一条可复现的最小任务记录。实际结果必须来自当次测试，不要沿用下面的占位符：
+
+```text
+测试时间（Asia/Shanghai）：YYYY-MM-DD HH:mm
+输入条件：器件类别、关键电气约束、封装/尺寸、目标数量等
+检索范围：使用的类别、关键词、筛选条件与已检查分页
+结果：全量候选 __ 个，待核验候选 __ 个，排除项 __ 个
+输出：Excel 文件名或结果截图链接
+环境说明：是否只读使用了用户已有的登录会话；是否存在访问失败或动态字段缺失
+```
